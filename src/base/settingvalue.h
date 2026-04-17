@@ -45,7 +45,9 @@ public:
 
     T get(const T &defaultValue = {}) const
     {
-        return SettingsStorage::instance()->loadValue(m_keyName, defaultValue);
+        if (SettingsStorage *storage = SettingsStorage::instance())
+            return storage->loadValue(m_keyName, defaultValue);
+        return defaultValue;
     }
 
     operator T() const
@@ -55,7 +57,8 @@ public:
 
     SettingValue<T> &operator=(const T &value)
     {
-        SettingsStorage::instance()->storeValue(m_keyName, value);
+        if (SettingsStorage *storage = SettingsStorage::instance())
+            storage->storeValue(m_keyName, value);
         return *this;
     }
 
